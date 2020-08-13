@@ -28,20 +28,32 @@ if __name__ == '__main__':
             date = get_random_date()
             date_str = '%s %s %s' % (num_to_month[date.month], date.day, date.year)
             print('%s?' % date_str)
-            guess_weekday = int(input())
-            print('You guessed: %s' % num_to_weekday[guess_weekday])
+
+            while True:
+                try:
+                    guess_number = int(input())
+                    if guess_number >= 0 and guess_number < 7:
+                        break
+                except KeyboardInterrupt:
+                    raise
+                except:
+                    print('Input a number from 0 to 6!')
+
+            guess_weekday = num_to_weekday[guess_number]
             true_weekday = date.isoweekday() % 7
-            if guess_weekday == true_weekday:
-                print('Right!')
+
+            if guess_number == true_weekday:
+                print('Right! You guessed: %s' % guess_weekday)
                 count_right += 1
             else:
-                print('Wrong!')
+                print('Wrong! You guessed: %s' % guess_weekday)
                 print('%s is a %s. ' % (date_str, num_to_weekday[true_weekday]))
                 doomsday = datetime.datetime(date.year, 3, 1) - timedelta(days=1)
                 print('%s\'s doomsday was a %s.' % 
                     (date.year, num_to_weekday[doomsday.isoweekday()%7]))
             guess_time = time.time() - start
             avg_time = (avg_time*(count-1) + guess_time)/count
+            print()
             print('Guessed %.2f%% correctly so far.' % (count_right/count*100))
             print('Average time to guess: %.2f seconds' % avg_time)
 
